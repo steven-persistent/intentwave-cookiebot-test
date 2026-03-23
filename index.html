@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IntentWave + Cookiebot Test</title>
+
+  <!-- STEP 1: Cookiebot Script — replace data-cbid with your Domain Group ID -->
+  <script 
+    id="Cookiebot" 
+    src="https://consent.cookiebot.com/uc.js" 
+    data-cbid="YOUR-COOKIEBOT-DOMAIN-GROUP-ID" 
+    data-blockingmode="auto" 
+    type="text/javascript">
+  </script>
+
+  <!-- STEP 2: IntentWave Tracking Script — replace data-id with your IntentWave Site ID -->
+  <script type="text/plain" data-cookieconsent="marketing">
+    window.IntentWave=window.IntentWave||{};
+    window.IntentWave.track=window.IntentWave.track||function(){
+      window.IntentWave.track.q=window.IntentWave.track.q||[];
+      window.IntentWave.track.q.push(arguments)
+    };
+    (function(){
+      var u='https://cdn.intentwave.com/';
+      var d=document,g=d.createElement('script'),s=d.getElementsByTagName('script')[0];
+      g.type='text/javascript';g.async=!0;g.defer=!0;
+      g.src=u+'track.js';
+      g.setAttribute('data-name','IntentWave');
+      g.setAttribute('data-id','YOUR-INTENTWAVE-SITE-ID');
+      s.parentNode.insertBefore(g,s)
+    })()
+  </script>
+
+  <!-- STEP 3: IntentWave Custom Consent Script -->
+  <script>
+    function buildIntentWaveCategories() {
+      const categories = [];
+      if (Cookiebot.consent.necessary)   categories.push("necessary");
+      if (Cookiebot.consent.preferences) categories.push("performance");
+      if (Cookiebot.consent.statistics)  categories.push("analytics");
+      if (Cookiebot.consent.marketing)   categories.push("emailmarketing", "ads", "social");
+      return categories;
+    }
+
+    function generateConsentId() {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0;
+        var v = c === "x" ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function passConsentToIntentWave() {
+      if (!Cookiebot.consent.marketing) return;
+
+      var attempts = 0;
+      var maxAttempts = 50;
+      var interval = setInterval(function() {
+        attempts++;
+        if (typeof IntentWave !== "undefined" && typeof IntentWave.customConsent === "function") {
+          clearInterval(interval);
+          IntentWave.customConsent({
+            categories: buildIntentWaveCategories(),
+            consentTimestamp: new Date().toISOString(),
+            consentId: generateConsentId(),
+            provider: "cookiebot",
+            consentURL: window.location.href
+          });
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
+        }
+      }, 200);
+    }
+
+    window.addEventListener("CookiebotOnAccept", passConsentToIntentWave);
+    window.addEventListener("CookiebotOnConsentReady", passConsentToIntentWave);
+  </script>
+</head>
+<body>
+  <h1>IntentWave + Cookiebot Test Page</h1>
+  <p>This page is used to test the Cookiebot and IntentWave consent integration.</p>
+  <p>When you accept cookies, consent data should be sent to IntentWave automatically.</p>
+
+  <hr/>
+  <h2>How to test:</h2>
+  <ol>
+    <li>Accept cookies on the banner that appears</li>
+    <li>Open browser DevTools → Console — you should see no errors</li>
+    <li>Check your IntentWave dashboard for a new consent record</li>
+    <li>Check your Cookiebot dashboard for consent activity</li>
+  </ol>
+</body>
+</html>

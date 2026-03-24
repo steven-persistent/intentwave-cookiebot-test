@@ -16,8 +16,9 @@
       window.IntentWave.track.q.push(arguments)
     };
     (function(){
+        var attempts = 0;
         var interval = setInterval(function() {
-        attempts++;
+        attempts ++
         if (typeof window.CookieConsent !== "undefined" && typeof window.CookieConsent.loadCDNiFrame === "function") {
           clearInterval(interval);
           var u='https://cdn.intentwave.com/';
@@ -27,10 +28,10 @@
           g.setAttribute('data-name','IntentWave');
           g.setAttribute('data-id','fb21eafe-aefd-4b34-87b8-9a6a4c3ae561');
           s.parentNode.insertBefore(g,s)
-        } else if (attempts >= maxAttempts) {
+        } else if (attempts >= 10) {
           clearInterval(interval);
         }
-      }, 200);
+      }, 1000);
     })()
   </script>
 

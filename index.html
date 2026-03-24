@@ -9,29 +9,20 @@
   <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="68fd9740-eb64-4287-aa11-01a026a49508" data-blockingmode="auto" type="text/javascript"></script>
 
   <!-- STEP 2: IntentWave Tracking Script — replace data-id with your IntentWave Site ID -->
-  <script>
+  <script type="text/plain" data-cookieconsent="marketing">>
     window.IntentWave=window.IntentWave||{};
     window.IntentWave.track=window.IntentWave.track||function(){
       window.IntentWave.track.q=window.IntentWave.track.q||[];
       window.IntentWave.track.q.push(arguments)
     };
     (function(){
-        var attempts = 0;
-        var interval = setInterval(function() {
-        attempts ++
-        if (typeof window.CookieConsent !== "undefined" && typeof window.CookieConsent.loadCDNiFrame === "function") {
-          clearInterval(interval);
-          var u='https://cdn.intentwave.com/';
-          var d=document,g=d.createElement('script'),s=d.getElementsByTagName('script')[0];
-          g.type='text/javascript';g.async=!0;g.defer=!0;
-          g.src=u+'track.js';
-          g.setAttribute('data-name','IntentWave');
-          g.setAttribute('data-id','fb21eafe-aefd-4b34-87b8-9a6a4c3ae561');
-          s.parentNode.insertBefore(g,s)
-        } else if (attempts >= 10) {
-          clearInterval(interval);
-        }
-      }, 1000);
+        var u='https://cdn.intentwave.com/';
+        var d=document,g=d.createElement('script'),s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript';g.async=!0;g.defer=!0;
+        g.src=u+'track.js';
+        g.setAttribute('data-name','IntentWave');
+        g.setAttribute('data-id','fb21eafe-aefd-4b34-87b8-9a6a4c3ae561');
+        s.parentNode.insertBefore(g,s)
     })()
   </script>
 
@@ -39,48 +30,47 @@
   
   <!-- STEP 3: IntentWave Custom Consent Script -->
   <script>
-    // function buildIntentWaveCategories() {
-    //   const categories = [];
-    //   if (Cookiebot.consent.necessary)   categories.push("necessary");
-    //   if (Cookiebot.consent.preferences) categories.push("performance");
-    //   if (Cookiebot.consent.statistics)  categories.push("analytics");
-    //   if (Cookiebot.consent.marketing)   categories.push("emailmarketing", "ads", "social");
-    //   return categories;
-    // }
+    function buildIntentWaveCategories() {
+      const categories = [];
+      if (Cookiebot.consent.necessary)   categories.push("necessary");
+      if (Cookiebot.consent.preferences) categories.push("performance");
+      if (Cookiebot.consent.statistics)  categories.push("analytics");
+      if (Cookiebot.consent.marketing)   categories.push("emailmarketing", "ads", "social");
+      return categories;
+    }
 
-    // function generateConsentId() {
-    //   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-    //     var r = Math.random() * 16 | 0;
-    //     var v = c === "x" ? r : (r & 0x3 | 0x8);
-    //     return v.toString(16);
-    //   });
-    // }
+    function generateConsentId() {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0;
+        var v = c === "x" ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
 
-    // function passConsentToIntentWave() {
-    //   if (!Cookiebot.consent) return;
+    function passConsentToIntentWave() {
+      if (!Cookiebot.consent) return;
 
-    //   var attempts = 0;
-    //   var maxAttempts = 50;
-    //   var interval = setInterval(function() {
-    //     attempts++;
-    //     if (typeof IntentWave !== "undefined" && typeof IntentWave.customConsent === "function") {
-    //       clearInterval(interval);
-    //       IntentWave.customConsent({
-    //         categories: buildIntentWaveCategories(),
-    //         consentTimestamp: new Date().toISOString(),
-    //         consentId: generateConsentId(),
-    //         provider: "cookiebot",
-    //         consentURL: window.location.href
-    //       });
-    //     } else if (attempts >= maxAttempts) {
-    //       clearInterval(interval);
-    //     }
-    //   }, 200);
-    // }
+      var attempts = 0;
+      var maxAttempts = 50;
+      var interval = setInterval(function() {
+        attempts++;
+        if (typeof IntentWave !== "undefined" && typeof IntentWave.customConsent === "function") {
+          clearInterval(interval);
+          IntentWave.customConsent({
+            categories: buildIntentWaveCategories(),
+            consentTimestamp: new Date().toISOString(),
+            consentId: generateConsentId(),
+            provider: "cookiebot",
+            consentURL: window.location.href
+          });
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
+        }
+      }, 200);
+    }
 
-    // window.addEventListener("CookiebotOnLoad", passConsentToIntentWave);
-    // window.addEventListener("CookiebotOnAccept", passConsentToIntentWave);
-    // window.addEventListener("CookiebotOnDecline", passConsentToIntentWave);
+    window.addEventListener("CookiebotOnAccept", passConsentToIntentWave);
+    window.addEventListener("CookiebotOnConsentReady", passConsentToIntentWave);
   </script>
 </head>
 <body>

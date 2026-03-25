@@ -9,7 +9,7 @@
   <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="68fd9740-eb64-4287-aa11-01a026a49508" data-blockingmode="auto" type="text/javascript"></script>
 
   <!-- STEP 2: IntentWave Tracking Script — replace data-id with your IntentWave Site ID -->
-  <script type="text/plain" data-cookieconsent="marketing">
+  <script type="text/javascript">
 window.IntentWave=window.IntentWave||{};window.IntentWave.track=window.IntentWave.track||function(){window.IntentWave.track.q=window.IntentWave.track.q||[];window.IntentWave.track.q.push(arguments)};(function(){var u='https://cdn.intentwave.com/';var d=document,g=d.createElement('script'),s=d.getElementsByTagName('script')[0];g.type='text/javascript';g.async=!0;g.defer=!0;g.src=u+'track.js';g.setAttribute('data-name','IntentWave');g.setAttribute('data-id', 'c25fbd5a-ac19-4074-ad65-07c1e4ff43b5');s.parentNode.insertBefore(g,s)})()
 </script>
 
@@ -55,7 +55,7 @@ window.IntentWave=window.IntentWave||{};window.IntentWave.track=window.IntentWav
         }
       }, 200);
     }
-
+    passConsentToIntentWave();
     window.addEventListener("CookiebotOnAccept", passConsentToIntentWave);
     window.addEventListener("CookiebotOnConsentReady", passConsentToIntentWave);
   </script>
